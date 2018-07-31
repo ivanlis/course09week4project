@@ -74,24 +74,11 @@ pg <- ggplot(data = data.frame(predictColor = predictColor, predictColorUv = pre
 
 pg <- ggplot(data = data.frame(predictColor = predictColor, predictColorUv = predictColorUv, predictColorUvInteract = predictColorUvInteract, realDoc = dataToUse$logDoc)) + geom_point(mapping = aes(x = realDoc, y = predictColor - realDoc)) + geom_point(mapping = aes(x = predictColorUv, y = predictColorUv - realDoc), color = "red") + geom_point(mapping = aes(x = predictColorUvInteract, y = predictColorUvInteract - realDoc), color = "green")
 
+library(plotly)
+dataToPlot <- data.frame(predictColor = predictColor, predictColorUv = predictColorUv, predictColorUvInteract = predictColorUvInteract, realDoc = dataToUse$logDoc, logColor = dataToUse$logColor, logUv254 = dataToUse$logUv254)
+
+pl <- plot_ly(dataToPlot) %>% add_markers(dataToPlot, x = ~logColor, y = ~logUv254, z = ~predictColorUvInteract, marker = list(color = "rgba(0,0,255,0.5)")) %>% add_markers(dataToPlot, x = ~logColor, y = ~logUv254, z = ~realDoc, marker = list(color = "rgba(255,0,0,0.5)"))
+pl
+
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
