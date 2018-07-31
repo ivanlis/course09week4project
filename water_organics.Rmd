@@ -1,0 +1,97 @@
+---
+title: "Research on Water Treatment"
+author: "Ivan Lysiuchenko"
+date: '30 июля 2018 г '
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Loading the data
+
+```{r message=FALSE}
+library(openxlsx)
+
+waterOrg <- read.xlsx("treatability_organic.xlsx", sheet = 2, rows = 11:320, cols = 1:10, na.strings = c("NA", "--", "---", ""))
+
+#TODO: factors, grouping
+
+names(waterOrg) <- c("sample", "site", "surface_subsurface", "collection_method", "raw_treated", "alum_dose", "ph", "uv254", "color", "doc")
+
+library(dplyr)
+
+waterOrg <- waterOrg %>% filter(!is.na(ph) & !is.na(uv254) & !is.na(color) & !is.na(doc) & (!is.na(alum_dose) | raw_treated == "Raw"))
+
+waterOrg[waterOrg$raw_treated == "Raw", "alum_dose"] = 0
+
+sampleSplit <- strsplit(sprintf("%0.1f" ,waterOrg$sample), ".", fixed = TRUE)
+
+waterOrg$sampleA <- 0
+waterOrg$sampleB <- 0
+
+for (i in 1:length(sampleSplit))
+{
+    waterOrg$sampleA[i] <- as.integer(sampleSplit[[i]][1])
+    waterOrg$sampleB[i] <- as.integer(sampleSplit[[i]][2])
+}
+
+waterOrg$sampleA <- as.factor(waterOrg$sampleA)
+
+waterOrg$logPh <- log(waterOrg$ph)
+waterOrg$logUv254 <- log(waterOrg$uv254)
+waterOrg$logColor <- log(waterOrg$color)
+waterOrg$logDoc <- log(waterOrg$doc)
+
+sites <- unique(waterOrg$site)
+
+dataToUse <- waterOrg
+#dataToUse <- waterOrg[waterOrg$site == sites[5],]
+#dataToUse <- waterOrg[waterOrg$surface_subsurface == "Runoff",]
+
+modelColor <- lm(data = dataToUse, formula = logDoc ~ logColor)
+modelColorUv <- lm(data = dataToUse, formula = logDoc ~ logColor + logUv254)
+modelColorUvInteract <- lm(data = dataToUse, formula = logDoc ~ logColor * logUv254)
+
+#modelColorUvSquared <- lm(data = dataToUse, formula = logDoc ~ polym(logColor, logUv254, 2))
+
+predictColor <- predict(modelColor, dataToUse)
+predictColorUv <- predict(modelColorUv, dataToUse)
+predictColorUvInteract <- predict(modelColorUvInteract, dataToUse)
+
+
+
+
+
+library(ggplot2)
+
+g <- ggplot(data = waterOrg[waterOrg$sampleA == "328",], mapping = aes(x = alum_dose, y = log(color + 1), group = sampleA, color = sampleA)) + geom_line()
+
+g <- ggplot(data = waterOrg[waterOrg$site == sites[10],], mapping = aes(x = log(alum_dose), y = log(doc), group = sampleA, color = surface_subsurface)) + geom_point() + geom_line() + geom_smooth(method = "lm"); g
+
+pg <- ggplot(data = data.frame(predictColor = predictColor, predictColorUv = predictColorUv, predictColorUvInteract = predictColorUvInteract, realDoc = dataToUse$logDoc)) + geom_point(mapping = aes(x = realDoc, y = predictColor)) + geom_point(mapping = aes(x = predictColorUv, y = realDoc), color = "red") + geom_point(mapping = aes(x = predictColorUvInteract, y = realDoc), color = "green")
+
+pg <- ggplot(data = data.frame(predictColor = predictColor, predictColorUv = predictColorUv, predictColorUvInteract = predictColorUvInteract, realDoc = dataToUse$logDoc)) + geom_point(mapping = aes(x = realDoc, y = predictColor - realDoc)) + geom_point(mapping = aes(x = predictColorUv, y = predictColorUv - realDoc), color = "red") + geom_point(mapping = aes(x = predictColorUvInteract, y = predictColorUvInteract - realDoc), color = "green")
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
