@@ -39,10 +39,15 @@ for (i in 1:length(sampleSplit))
 
 waterOrg$sampleA <- as.factor(waterOrg$sampleA)
 
-waterOrg$logPh <- log(waterOrg$ph)
-waterOrg$logUv254 <- log(waterOrg$uv254)
-waterOrg$logColor <- log(waterOrg$color)
-waterOrg$logDoc <- log(waterOrg$doc)
+#waterOrg$logPh <- log(waterOrg$ph)
+#waterOrg$logUv254 <- log(waterOrg$uv254)
+#waterOrg$logColor <- log(waterOrg$color)
+#waterOrg$logDoc <- log(waterOrg$doc)
+
+waterOrg$logPh <- waterOrg$ph
+waterOrg$logUv254 <- waterOrg$uv254
+waterOrg$logColor <- waterOrg$color
+waterOrg$logDoc <- waterOrg$doc
 
 sites <- unique(waterOrg$site)
 
