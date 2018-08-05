@@ -5,8 +5,8 @@ account: ivanlis
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 394073
-bundleId: 1515455
+bundleId: 1519391
 url: https://ivanlis.shinyapps.io/shiny_water/
-when: 1533245187.64472
+when: 1533495681.16594
 asMultiple: FALSE
 asStatic: FALSE

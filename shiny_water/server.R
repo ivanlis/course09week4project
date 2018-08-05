@@ -92,7 +92,7 @@ shinyServer(function(input, output) {
     
     observeEvent(input$toggleDocButton, {
         if (input$toggleDocButton %% 2 == 0)
-            output$doc <- renderUI("")
+            output$doc <- renderUI({""})
         else
             output$doc <- renderUI({
                 includeHTML("gettingstarted.html")
