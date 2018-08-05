@@ -1,15 +1,45 @@
----
-title: "Getting Started"
-author: "Ivan Lysiuchenko"
-date: "August 5, 2018"
-output: html_document
----
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Usage
+### Dataset overview
 
-Here we'll explaing how to use our shiny app.
+The data set is taken from the work
 
+Van Leeuwen, J., J. Awad, D.J. Chittleborough, E. Bestland, J.W. Cox, M. Drikas, C. Chow and R.J. Smernik, 2017.  ARC LP 110200208 (2012-2016): Impact of natural organic carbon and nutrients on water quality: Identification of catchment sources and attenuation processes.  UniSA Research Data Access Portal, University of South Australia.
+
+You can download the data using the link provided on the side panel of this application.
+
+Some minor preprocessing is applied to the original data set. All the steps can be seen
+in the server.R file. We work with the following variables:
+
+- *surface_subsurface*: describes the origin of the water sample, can be '~60 cm', '~30 cm',
+'Surface' or 'Runoff'.
+- *ph*: sample pH.
+- *uv254* (cm^-1^): UV light absorbance at 254 nm wavelength.
+- *color* (Hazen Units, HU): visible light absorbance.
+- *doc* (mg/L): dissolvable organic carbon (DOC) concentration.
+
+### How to use the application
+
+The aim of this shiny application is to display different multiple regression models describing
+the DOC concentration as a function of some set of predictors.
+
+#### Input
+
+On the side panel you can choose between some options:
+
+- *Predictors to use*: set of predictors used to build the model.
+- *Water origin*: set of *surface_subsurface* values to consider.
+
+To build the model based on the parameters you specified, press the *'Build'* button.
+
+Use the *'Toggle Documentation'* button to make this documentation appear/disappear.
+
+#### Output
+
+The main panel displays up to three pieces of output:
+
+- *This documentation* if you make it appear with the *'Toggle Documentation'* button.
+- Plots describing some *residuals diagnostics* for the last model built.
+- The model *summary* allowing to estimate the accuracy.

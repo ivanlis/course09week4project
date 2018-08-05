@@ -4,7 +4,7 @@ library(shiny)
 shinyUI(fluidPage(
   
   # Application title
-  titlePanel("Dissolved Organic Carbon vs Color and UV in Water"),
+  titlePanel("Models for Dissolved Organic Carbon in Water"),
   
   # Sidebar with a slider input for number of bins 
   sidebarLayout(
@@ -18,7 +18,7 @@ shinyUI(fluidPage(
                                 "Color, UV 254 and PH" = 
                                     "colorUvPh"),
                     selected = c("colorUv")),
-       selectInput(inputId = "origin", label = "Water Origin",
+       selectInput(inputId = "origin", label = "Water origin",
                    choices = c("Runoff" = "Runoff", 
                                "Surface" = "Surface", 
                                "30 cm" = "~30 cm",
