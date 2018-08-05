@@ -25,11 +25,18 @@ shinyUI(fluidPage(
                                "60 cm" = "~60 cm"),
                    multiple = TRUE,
                    selected = c("Runoff", "Surface", "~30 cm", "~60 cm")),
-       actionButton(inputId = "buildButton", label = "Build")
+       actionButton(inputId = "buildButton", label = "Build"),
+       tags$br(),
+       actionButton(inputId = "toggleDocButton", label = "Toggle Documentation"),
+       tags$p(
+           tags$a(href = "https://data.unisa.edu.au/Dataset.aspx?DatasetID=273951",
+                  "Dataset web page")
+       )
     ),
     
     # Show a plot of the generated distribution
     mainPanel(
+       htmlOutput(outputId = "doc"),
        plotOutput(outputId = "residualPlot"),
        verbatimTextOutput(outputId = "modelSummary")
     )

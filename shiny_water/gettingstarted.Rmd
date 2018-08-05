@@ -1,0 +1,15 @@
+---
+title: "Getting Started"
+author: "Ivan Lysiuchenko"
+date: "August 5, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Usage
+
+Here we'll explaing how to use our shiny app.
+

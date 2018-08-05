@@ -85,5 +85,18 @@ shinyServer(function(input, output) {
         par(mfrow = c(2,2))
         plot(ourModel())
     })
+    
+#    output$doc <- renderUI({
+#        includeHTML("gettingstarted.html")
+#    })
+    
+    observeEvent(input$toggleDocButton, {
+        if (input$toggleDocButton %% 2 == 0)
+            output$doc <- renderUI("")
+        else
+            output$doc <- renderUI({
+                includeHTML("gettingstarted.html")
+                })
+    })
   
 })
