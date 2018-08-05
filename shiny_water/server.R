@@ -90,13 +90,26 @@ shinyServer(function(input, output) {
 #        includeHTML("gettingstarted.html")
 #    })
     
-    observeEvent(input$toggleDocButton, {
-        if (input$toggleDocButton %% 2 == 0)
-            output$doc <- renderUI({""})
+#    observeEvent(input$toggleDocButton, {
+#        if (input$toggleDocButton %% 2 == 0)
+#            output$doc <- renderUI({ tags$p() })
+#        else
+#            output$doc <- renderUI({
+#                includeHTML("gettingstarted.html")
+#                })
+#    })
+    
+    hideDoc <- reactive({
+        as.integer(input$toggleDocButton) %% 2 == 0
+    })
+    
+    output$doc <- renderUI({
+#        tags$p(as.integer(input$toggleDocButton) %% 2 == 0)
+#        tags$p(input$toggleDocButton)
+        if (hideDoc())
+            tags$p("")
         else
-            output$doc <- renderUI({
-                includeHTML("gettingstarted.html")
-                })
+            includeHTML("gettingstarted.html")
     })
   
 })
