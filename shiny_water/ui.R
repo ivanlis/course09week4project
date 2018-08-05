@@ -36,7 +36,7 @@ shinyUI(fluidPage(
     
     # Show a plot of the generated distribution
     mainPanel(
-       htmlOutput(outputId = "doc"),
+       uiOutput(outputId = "doc"),
        plotOutput(outputId = "residualPlot"),
        verbatimTextOutput(outputId = "modelSummary")
     )
