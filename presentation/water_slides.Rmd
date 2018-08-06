@@ -9,13 +9,71 @@ output: ioslides_presentation
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Original Data
+## Original Data and Our Application
 
+- The original dataset is related to the work
+
+Van Leeuwen, J., J. Awad, D.J. Chittleborough, E. Bestland, J.W. Cox, M. Drikas, C. Chow and R.J. Smernik, 2017.  ARC LP 110200208 (2012-2016): Impact of natural organic carbon and nutrients on water quality: Identification of catchment sources and attenuation processes.  UniSA Research Data Access Portal, University of South Australia.
+
+- Link to download the data:
+<https://data.unisa.edu.au/Dataset.aspx?DatasetID=273951>
+
+- Links to our application:
+<https://ivanlis.shinyapps.io/shiny_water/>
+<https://github.com/ivanlis/course09week4project.git> (shiny_water directory)
 
 ## Data Preprocessing
 
+This is how the data are read and preprocessed by the server:
+
+```{r echo=FALSE, message=FALSE}
+library(openxlsx)
+library(dplyr)
+```
+
+
+```{r echo=TRUE, message=FALSE}
+waterOrg <- read.xlsx("../shiny_water/treatability_organic.xlsx", 
+                      sheet = 2, rows = 11:320, cols = 1:10, 
+                          na.strings = c("NA", "--", "---", ""))
+names(waterOrg) <- c("sample", "site", "surface_subsurface", 
+                     "collection_method", "raw_treated", 
+                     "alum_dose", "ph", "uv254", "color", "doc")
+waterOrg <- waterOrg %>% 
+    filter(!is.na(ph) & !is.na(uv254) & !is.na(color) & 
+        !is.na(doc) & (!is.na(alum_dose) | raw_treated == "Raw"))
+waterOrg[waterOrg$raw_treated == "Raw", "alum_dose"] = 0
+```
 
 ## Computing the Model
 
+A (Multiple) Linear Regression model is built like this:
 
-## Displaying the Result
+```{r echo=TRUE, message=FALSE}
+model <- lm(data = waterOrg, formula = doc ~ color + uv254)
+```
+
+The user is able to work with a subset of the dataset (the 'Water Source' input),
+as well as to modify the set of predictors ('Predictors to use'):
+
+- formula = doc ~ color
+- formula = doc ~ uv254
+- formula = doc ~ color + uv254
+- formula = doc ~ color * uv254
+- formula = doc ~ color + uv254 + ph
+
+
+## Model Summary and Residuals
+
+The model summary is shown:
+
+```{r echo=TRUE, message=FALSE}
+summary(model)$coef
+```
+
+Also the diagnostic residual plots are provided:
+
+```{r echo=TRUE, message=FALSE, eval=FALSE}
+par(mfrow = c(2,2))
+plot(model)
+```
