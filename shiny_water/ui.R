@@ -1,8 +1,11 @@
 library(shiny)
+library(shinyjs)
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
   
+  useShinyjs(),
+    
   # Application title
   titlePanel("Models for Dissolved Organic Carbon in Water"),
   
@@ -26,8 +29,10 @@ shinyUI(fluidPage(
                    multiple = TRUE,
                    selected = c("Runoff", "Surface", "~30 cm", "~60 cm")),
        actionButton(inputId = "buildButton", label = "Build"),
-       tags$br(),
-       actionButton(inputId = "toggleDocButton", label = "Toggle Documentation"),
+       tags$br(), tags$br(),
+       tags$p(
+           tags$a(href = "#", "Toggle Documentation", id = "toggleDocLink")  
+       ),
        tags$p(
            tags$a(href = "https://data.unisa.edu.au/Dataset.aspx?DatasetID=273951",
                   "Dataset web page")
@@ -36,7 +41,9 @@ shinyUI(fluidPage(
     
     # Show a plot of the generated distribution
     mainPanel(
-       uiOutput(outputId = "doc"),
+       #htmlOutput(outputId = "doc"),
+       #shinyjs::hidden(uiOutput(outputId = "doc")),
+       shinyjs::hidden(div(id = "doc")),
        plotOutput(outputId = "residualPlot"),
        verbatimTextOutput(outputId = "modelSummary")
     )

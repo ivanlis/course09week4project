@@ -34,12 +34,12 @@ On the side panel you can choose between some options:
 
 To build the model based on the parameters you specified, press the *'Build'* button.
 
-Use the *'Toggle Documentation'* button to make this documentation appear/disappear.
+Use the *'Toggle Documentation'* link to make this documentation appear/disappear.
 
 #### Output
 
 The main panel displays up to three pieces of output:
 
-- *This documentation* if you make it appear with the *'Toggle Documentation'* button.
+- *This documentation* if you make it appear with the *'Toggle Documentation'* link.
 - Plots describing some *residuals diagnostics* for the last model built.
 - The model *summary* allowing to estimate the accuracy.
